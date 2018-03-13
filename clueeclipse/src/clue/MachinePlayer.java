@@ -24,9 +24,12 @@ class MachinePlayer extends Player {
 
     @Override
     public void observe(Guess guess, int holdingPlayer) {
-    		reasoner.addAndResolve(new Or(new Has(guess.suspect,holdingPlayer),
-    				new Has(guess.weapon,holdingPlayer),
-    				new Has(guess.room,holdingPlayer)));
+    		if(holdingPlayer != playerID) {
+    			reasoner.addAndResolve(new Or(new Has(guess.suspect,holdingPlayer),
+        				new Has(guess.weapon,holdingPlayer),
+        				new Has(guess.room,holdingPlayer)));
+    		}
+    		
     }
 
     @Override

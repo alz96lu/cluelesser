@@ -11,8 +11,11 @@ public class AxiomSet {
     ArrayList<Suspect> suspects = new ArrayList<Suspect>();	
     
     void addToDefs(Definite d) {
-    		defs.add(d);
-    		ruleOut(d);
+    		if(!defs.contains(d)) {
+    			defs.add(d);
+    			ruleOut(d);
+    		}
+    		
     }
 	
 	public AxiomSet(int playerID, ArrayList<Card> cards) {
@@ -161,6 +164,8 @@ public class AxiomSet {
 		
 		if(or.size() == 1) {
 			addAndResolve(new Definite(or.get(0)));
+		} else {
+			ors.add(or);
 		}
 		
 	}
@@ -195,12 +200,12 @@ public class AxiomSet {
 		t.test(!ax.rooms.contains(new Room("Hall")), "should not have hall");
 
 		
-		System.out.println(ax);
-		System.out.println(ax.weapons);
-		System.out.println(ax.suspects);
-		System.out.println(ax.rooms);
+//		System.out.println(ax);
+//		System.out.println(ax.weapons);
+//		System.out.println(ax.suspects);
+//		System.out.println(ax.rooms);
 		
-		System.out.println(ax.pertainingDefs(0));
+//		System.out.println(ax.pertainingDefs(0));
 		t.test(ax.pertainingDefs(0).size() ==4,"should have 4 cards related to player 0");
 		t.assess();
 
@@ -219,20 +224,20 @@ public class AxiomSet {
 	
 	static void test() {
 		AxiomSet ax = new AxiomSet(5, new ArrayList<Card>());
-		System.out.println(ax);
+//		System.out.println(ax);
 		Tester t = new Tester();
 		
 		ax.add(new Or(new Has(new Weapon("Knife"),1),
 				new Has(new Room("Hall"),1),
 				new Has(new Suspect("Professor Plum"),1))
 				);
-		System.out.println(ax);
+//		System.out.println(ax);
 		Definite d = new Definite(new Has(new Weapon("Knife"),2));
 		ax.addAndResolve(d);
-		System.out.println(ax);
+//		System.out.println(ax);
 		t.test(!ax.ors.get(0).contains(new Has(new Weapon("Knife"),1)), "should not have knife");
 		ax.addAndResolve(new Definite(new Has(new Room("Hall"),2)));
-		System.out.println(ax);
+//		System.out.println(ax);
 		t.test(ax.defs.size() == 3, "all 3 are added");
 		
 		ax.add(new Or(new Has(new Weapon("Rope"),1),
@@ -248,7 +253,7 @@ public class AxiomSet {
 		ax.addAndResolve(new Or(new Has(new Room("Ballroom"),1),
 				new Has(new Suspect("Justice Peacock"),2)));
 		t.test(ax.cardsPlayer(new Suspect("Justice Peacock")) == 2, "should know peacock belongs to 2");
-		System.out.println(ax);
+//		System.out.println(ax);
 		t.assess();
 
 	}

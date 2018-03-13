@@ -5,7 +5,6 @@ package clue;
 class Main {
 
     public static void main(String[] args){
-        System.out.println("Run game");
         // Register players, run game
 
         Game game = new Game();

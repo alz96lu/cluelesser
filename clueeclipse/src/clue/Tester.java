@@ -62,6 +62,8 @@ public class Tester {
 	public static void main(String args[]) {
 		Colors.load();
 		Game.test();
+		AxiomSet.main(args);
+//		Has.main(args);
 		
 		
 	

@@ -28,13 +28,24 @@ class PlayerRing {
 	}
 
 	Guess manageTurn(int currentPlayer) {
-		System.out.println("Player " + currentPlayer + "'s turn");
-		System.out.println("Player " + currentPlayer + " knows: ");
-		System.out.println(allPlayers.get(currentPlayer).getWeapons());
-		System.out.println(allPlayers.get(currentPlayer).getSuspects());
-		System.out.println(allPlayers.get(currentPlayer).getRooms());
+		System.out.println("Player " + currentPlayer + "'s turn\n");
+		if(allPlayers.get(currentPlayer).getClass().getName().contains("Machine")) {
+			System.out.println("Machine Player " + currentPlayer + "'s AxiomSet:");
+			System.out.println(allPlayers.get(currentPlayer).getAxiomSet());
+			
+			System.out.println("Possible guesses: ");
+			System.out.println(allPlayers.get(currentPlayer).getAxiomSet().suspects);
+			System.out.println(allPlayers.get(currentPlayer).getAxiomSet().rooms);
+			System.out.println(allPlayers.get(currentPlayer).getAxiomSet().weapons);		
+		} else {
+			System.out.println("Possible guesses: ");
+			System.out.println(allPlayers.get(currentPlayer).getWeapons());
+			System.out.println(allPlayers.get(currentPlayer).getSuspects());
+			System.out.println(allPlayers.get(currentPlayer).getRooms());	
+		}
 
 		Guess currentGuess = allPlayers.get(currentPlayer).makeGuess();
+		System.out.println("\nGuess: " + currentGuess);
 
 		Boolean cardShown = false;
 		int responsePlayer = next(currentPlayer);
@@ -53,18 +64,28 @@ class PlayerRing {
 			}
 
 		}
+		
+		if(cardShown == true) {
+			System.out.println("Player " + responsePlayer 
+					+ " showed Player " + currentPlayer + " "
+					+ responseCard);
+
+		} else {
+			System.out.println("Nobody showed a card");
+		}
 
 		// if nobody showed a card, ask the current player if they want to 
 		// open the envelope
 
 		Guess returnGuess = null;
-		System.out.println(cardShown);
 		if(cardShown == false) {
 			if(allPlayers.get(currentPlayer).openConfidential(currentGuess)){
+				System.out.println("Player " + currentPlayer + " opens confidential with guess: \n" + currentGuess);
 				returnGuess = currentGuess;
+			} else {
+				System.out.println("No card shown, player " + currentPlayer + "does not open confidential\n" + currentGuess);
 			}
 		} else {
-			System.out.println("Observing");
 			allPlayers.get(currentPlayer).observeCard(responseCard, responsePlayer);
 		}
 
@@ -78,6 +99,7 @@ class PlayerRing {
 			allPlayers.get(observingPlayer).observe(currentGuess, responsePlayer);
 			observingPlayer = next(observingPlayer);
 		}
+		System.out.println("");
 
 		return returnGuess;   
 	}

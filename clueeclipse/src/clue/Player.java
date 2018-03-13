@@ -114,7 +114,6 @@ class Player implements PlayerInterface {
 		Guess guess = new Guess(suspects.get(Helper.random(suspects.size())),
 				rooms.get(Helper.random(rooms.size())),
 				weapons.get(Helper.random(weapons.size())));
-		System.out.println("Player " + this.playerID + " made a guess: " + guess);
 		return guess;
 	}
 
@@ -138,9 +137,6 @@ class Player implements PlayerInterface {
 
 	@Override
 	public void observeCard(Card responseCard, int responsePlayer) {
-
-		System.out.println("Player " + responsePlayer + " showed Player " + this.playerID + " "+ responseCard);
-
 			String classname = responseCard.getClass().getName();
 			if(classname.contains("Weapon")) {
 				weapons.remove(responseCard);
