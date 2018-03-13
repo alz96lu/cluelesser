@@ -10,14 +10,14 @@ class PlayerRing {
         allPlayers.add(player);
     }
     
-//    PlayerInterface getPlayerByID(int playerID) {
-//    	for(int i = 0; i < allPlayers.size(); i++) {
-//    		if(allPlayers.get(i).getPlayerID() == playerID) {
-//    			return allPlayers.get(i);
-//    		}
-//    	}
-//    	return null;
-//    }
+    PlayerInterface getPlayerByID(int playerID) {
+    	for(int i = 0; i < allPlayers.size(); i++) {
+    		if(allPlayers.get(i).getPlayerID() == playerID) {
+    			return allPlayers.get(i);
+    		}
+    	}
+    	return null;
+    }
 
     int numPlayers() {
         return allPlayers.size();
@@ -28,6 +28,18 @@ class PlayerRing {
     }
 
     Guess manageTurn(int currentPlayer) {
+    	System.out.println("Player " + currentPlayer + "'s turn");
+    	System.out.println("Player " + currentPlayer + " knows: ");
+    	System.out.println(allPlayers.get(currentPlayer).getWeapons());
+		System.out.println(allPlayers.get(currentPlayer).getSuspects());
+		System.out.println(allPlayers.get(currentPlayer).getRooms());
+		if(allPlayers.get(currentPlayer).getClass().getName().contains("Machine")) {
+			System.out.println("Player's ontology knows: " );
+			System.out.println(allPlayers.get(currentPlayer).getOntology().weapons);
+			System.out.println(allPlayers.get(currentPlayer).getOntology().suspects);
+			System.out.println(allPlayers.get(currentPlayer).getOntology().rooms);
+
+		}
         Guess currentGuess = allPlayers.get(currentPlayer).makeGuess();
 
         Boolean cardShown = false;
@@ -52,11 +64,13 @@ class PlayerRing {
         // open the envelope
         
         Guess returnGuess = null;
+        System.out.println(cardShown);
         if(cardShown == false) {
         	if(allPlayers.get(currentPlayer).openConfidential(currentGuess)){
         		returnGuess = currentGuess;
         	}
         } else {
+        	System.out.println("Observing");
         	allPlayers.get(currentPlayer).observeCard(responseCard, responsePlayer);
         }
         
@@ -119,6 +133,12 @@ class PlayerRing {
 		}
 		
 	}
+
+	public void loadOntologies(Guess confidential) {
+    	for(int i = 0; i < allPlayers.size(); i++) {
+    		allPlayers.get(i).loadOntology(confidential);
+		}
+	}
 	
 	static void testDealCards() {
 		Tester tester = new Tester();
@@ -171,6 +191,12 @@ class PlayerRing {
 			allPlayers.get(i).setNumPlayers(allPlayers.size());
 		}
 		
+	}
+
+	public void initialKnowledge() {
+		for(int i = 0; i < allPlayers.size();i++) {
+			allPlayers.get(i).initialKnowledge();
+		}
 	}
 
 	public void removePlayer(int playerID) {

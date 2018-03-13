@@ -16,8 +16,12 @@ public class ClueOntology {
     ArrayList<OWLNamedIndividual> weaponIndividuals;
     ArrayList<OWLNamedIndividual> playerIndividuals;
 
+    private static final String DOCUMENT_IRI = "http://clueless/example.owl";
 
-    public ClueOntology(ClueOntologyManager clueManager, Game game) {
+
+    public ClueOntology(ClueOntologyManager clueManager, Game game) throws OWLOntologyCreationException {
+
+
         this.clueManager = clueManager;
         this.ontology = clueManager.manager.createOntology(IRI.create(DOCUMENT_IRI));
         pm = new DefaultPrefixManager();

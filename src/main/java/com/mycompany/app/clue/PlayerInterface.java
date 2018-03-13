@@ -1,5 +1,7 @@
 package com.mycompany.app.clue;
 
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+
 import java.util.ArrayList;
 
 interface PlayerInterface {
@@ -7,6 +9,10 @@ interface PlayerInterface {
 	
 	// 
     Guess makeGuess();
+
+    void loadOntology(Guess confidential);
+
+    public Ontology getOntology();
     
 	Card showCard(Guess guess);
 	
@@ -24,6 +30,7 @@ interface PlayerInterface {
 	void observe(Guess guess, int holdingPlayer);
 	void setNumPlayers(int numPlayers);
 	void setPlayerID(int playerID);
+	void initialKnowledge();
 
 	boolean openConfidential(Guess currentGuess);
 
@@ -31,7 +38,10 @@ interface PlayerInterface {
 
 	int getPlayerID();
 
-	void makeOntology(ClueOntologyManager clueOntologyManager, Game game);
+	void makeOntology(ClueOntologyManager clueOntologyManager, Game game) throws OWLOntologyCreationException;
+	ArrayList<Weapon> getWeapons();
+	ArrayList<Suspect> getSuspects();
+	ArrayList<Room> getRooms();
 
 
 }

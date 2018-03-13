@@ -148,7 +148,7 @@ public class CreateOntology {
         //OWLObjectProperty negObjectProperty = factory.getOWLNegativeObjectProperty(name);
         OWLNegativeObjectPropertyAssertionAxiom negObjectProperty = factory.getOWLNegativeObjectPropertyAssertionAxiom(property, name, name2);
         manager.addAxiom(ontology, negObjectProperty);
-        //return negObjectProperty;
+        return negObjectProperty;
 
 
     }

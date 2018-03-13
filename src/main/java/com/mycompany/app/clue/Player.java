@@ -1,5 +1,7 @@
 package com.mycompany.app.clue;
 
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -19,10 +21,32 @@ class Player implements PlayerInterface {
 		return cards.size();
 	}
 
-	public void makeOntology(ClueOntologyManager clueOntologyManager, Game game) {
+	public void makeOntology(ClueOntologyManager clueOntologyManager, Game game) throws OWLOntologyCreationException {
 
 	}
-	
+
+	public void loadOntology(Guess confidential) {
+
+	}
+
+	@Override
+	public Ontology getOntology() {
+		return null;
+	}
+
+	public ArrayList<Weapon> getWeapons() {
+		return weapons;
+	}
+
+	public ArrayList<Suspect> getSuspects() {
+		return suspects;
+	}
+	public ArrayList<Room> getRooms() {
+		return rooms;
+	}
+
+
+
 
 	@Override
 	public String toString() {
@@ -45,6 +69,10 @@ class Player implements PlayerInterface {
 		this.rooms.addAll(Game.ROOMS);
 
 		// remove from options all the cards in hand
+
+	}
+
+	public void initialKnowledge() {
 		for(int susit = 0; susit < suspects.size(); susit++) {
 			if(hasCard(suspects.get(susit))) {
 				this.suspects.remove(suspects.get(susit));
@@ -88,9 +116,11 @@ class Player implements PlayerInterface {
 
 	@Override
 	public Guess makeGuess() {
-		return new Guess(suspects.get((int)Math.random()*suspects.size()),
-				rooms.get((int)Math.random()*rooms.size()),
-				weapons.get((int)Math.random()*rooms.size()));
+		Guess guess = new Guess(suspects.get(Helper.random(suspects.size())),
+				rooms.get(Helper.random(rooms.size())),
+				weapons.get(Helper.random(weapons.size())));
+		System.out.println("Player " + this.playerID + " made a guess: " + guess);
+		return guess;
 	}
 
 	@Override
@@ -113,16 +143,39 @@ class Player implements PlayerInterface {
 
 	@Override
 	public void observeCard(Card responseCard, int responsePlayer) {
-		if(hasCard(responseCard)) {
+
+		System.out.println("Player " + responsePlayer + " showed Player " + this.playerID + " "+ responseCard);
+
 			String classname = responseCard.getClass().getName();
-			if(classname.equals("Weapon")) {
+			if(classname.contains("Weapon")) {
 				weapons.remove(responseCard);
-			} else if (classname.equals("Room")) {
+			} else if (classname.contains("Room")) {
 				rooms.remove(responseCard);
 			} else {
 				suspects.remove(responseCard);
 			}
-		}
+	}
+
+	static void testObserveCard() {
+		Tester tester = new Tester();
+		Player player = new Player();
+		player.addCard(new Weapon("Knife"));
+		player.addCard(new Weapon("Rope"));
+		player.addCard(new Suspect("Senator Scarlet"));
+		player.initialKnowledge();
+		System.out.println(player.weapons);
+		tester.test(player.weapons.size() == Game.WEAPONS.size()-2, "should know 2 weapons");
+
+		Card responseCard = new Weapon("Wrench");
+		player.observeCard(responseCard,1);
+		System.out.println(responseCard.getClass().getName());
+		player.cards.remove(new Weapon("Knife"));
+		System.out.println(player.weapons);
+		tester.test(player.weapons.size() == Game.WEAPONS.size()-3, "should know 3 weapons");
+	}
+
+	public static void main(String args[]) {
+		testObserveCard();
 	}
 
 
@@ -150,9 +203,10 @@ class Player implements PlayerInterface {
 
 	@Override
 	public boolean openConfidential(Guess currentGuess) {
-		if((this.suspects.size() == 1 && this.suspects.get(0).equals(currentGuess.suspect))
-				&& (this.rooms.size() == 1 && this.rooms.get(0).equals(currentGuess.room))
-				&& (this.weapons.size() == 1 && this.weapons.get(0).equals(currentGuess.weapon))) {
+		if((!this.hasCard(currentGuess.suspect))
+				&& (!this.hasCard(currentGuess.weapon))
+				&& (!this.hasCard(currentGuess.room))
+		) {
 			return true;
 		}
 		return false;

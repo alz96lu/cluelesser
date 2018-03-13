@@ -1,5 +1,7 @@
 package com.mycompany.app.clue;
 
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +19,7 @@ class Game {
 			new Weapon("Lead Pipe"));
 	public static List<Suspect> SUSPECTS = Arrays.asList(
 			new Suspect("Senator Scarlet"),
-			new Suspect("Colonal Mustard"),
+			new Suspect("Colonel Mustard"),
 			new Suspect("Reverend Green"),
 			new Suspect("Professor Plum"),
 			new Suspect("Justice Peacock"),
@@ -38,16 +40,14 @@ class Game {
 	ClueOntologyManager ontologyManager;
 
     PlayerRing playerRing = new PlayerRing();
-    
-    static int NEXT = 0;
-    static int FINALGUESS = 1;
+
 	
 
 
-    void register(PlayerInterface player) {
-    	if(player.getClass().getName().equals("MachinePlayer")) {
-			player.makeOntology(ontologyManager, this);
-		}
+    void register(PlayerInterface player) throws OWLOntologyCreationException {
+//    	if(player.getClass().getName().contains("MachinePlayer")) {
+//			player.makeOntology(ontologyManager, this);
+//		}
         playerRing.add(player);
     }
     
@@ -68,6 +68,8 @@ class Game {
     	confidential = new Guess(deckSuspects.remove(Helper.random(deckSuspects.size())),
     			deckRooms.remove(Helper.random(deckRooms.size())),
     			deckWeapons.remove(Helper.random(deckWeapons.size())));
+
+    	System.out.println("Confidential file: " + confidential);
     	
     	
     	ArrayList<Card> deck = new ArrayList<Card>();
@@ -79,12 +81,19 @@ class Game {
     	//TODO: create deck
     	
     	playerRing.dealCards(deck);
+		playerRing.loadOntologies(confidential);
     	Guess turnResult = null;
     	Boolean gameOver = false;
     	int turnCount = 0;
     	int winnerID = -1;
+
+    	playerRing.initialKnowledge();
+		for(int i = 0; i < this.playerRing.numPlayers(); i++) {
+			System.out.println("Player " + i + "'s cards:");
+			System.out.println(this.playerRing.getPlayerByID(i).getCards());
+		}
     	
-    	while(!gameOver && turnCount < 7) {
+    	while(!gameOver) {
     		for(int i = 0;i<playerRing.numPlayers();i++) {
     			turnResult = turn(i);
     			turnCount++; // TODO: take this out
@@ -95,7 +104,10 @@ class Game {
     					
     					break;
     				} else {
+    					gameOver = true; // take out
+    					winnerID = -1; // take out
     					playerRing.removePlayer(i);
+    					// TODO: decriment number of players for all players
     					i--;
     				}    				
     			}
