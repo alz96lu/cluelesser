@@ -18,6 +18,10 @@ class Player implements PlayerInterface {
 	public int numCards() {
 		return cards.size();
 	}
+
+	public void makeOntology(ClueOntologyManager clueOntologyManager, Game game) {
+
+	}
 	
 
 	@Override
@@ -125,6 +129,7 @@ class Player implements PlayerInterface {
 
 	@Override
 	public void observe(Guess guess, int holdingPlayer) {
+
 		// what do you do when you see a card?
 		// Human Player can keep track themselves
 		// Machine Player should add to knowledge base

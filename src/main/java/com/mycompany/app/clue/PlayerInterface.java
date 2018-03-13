@@ -31,5 +31,7 @@ interface PlayerInterface {
 
 	int getPlayerID();
 
+	void makeOntology(ClueOntologyManager clueOntologyManager, Game game);
+
 
 }

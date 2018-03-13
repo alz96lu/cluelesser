@@ -143,15 +143,15 @@ public class CreateOntology {
 
         }
 
-//    private static OWLNegativeObjectPropertyAssertionAxiom createNegativeObjectProperty(OWLOntology ontology, OWLOntologyManager manager, OWLNamedIndividual name, OWLNamedIndividual name2, OWLObjectProperty property) {
-//        OWLDataFactory factory = manager.getOWLDataFactory();
-//        //OWLObjectProperty negObjectProperty = factory.getOWLObjectProperty(name, pm);
-//        OWLNegativeObjectPropertyAssertionAxiom negObjectProperty = factory.getOWLNegativeObjectPropertyAssertionAxiom(property, name, name2);
-//        manager.addAxiom(ontology, negObjectProperty);
-//        //return negObjectProperty;
-//
-//
-//    }
+    private static OWLNegativeObjectPropertyAssertionAxiom createNegativeObjectProperty(OWLOntology ontology, OWLOntologyManager manager, OWLNamedIndividual name, OWLNamedIndividual name2, OWLObjectProperty property) {
+        OWLDataFactory factory = manager.getOWLDataFactory();
+        //OWLObjectProperty negObjectProperty = factory.getOWLNegativeObjectProperty(name);
+        OWLNegativeObjectPropertyAssertionAxiom negObjectProperty = factory.getOWLNegativeObjectPropertyAssertionAxiom(property, name, name2);
+        manager.addAxiom(ontology, negObjectProperty);
+        //return negObjectProperty;
+
+
+    }
 
 
 }

@@ -35,6 +35,7 @@ class Game {
 			new Room("Study"));
 	
 	Guess confidential;
+	ClueOntologyManager ontologyManager;
 
     PlayerRing playerRing = new PlayerRing();
     
@@ -44,6 +45,9 @@ class Game {
 
 
     void register(PlayerInterface player) {
+    	if(player.getClass().getName().equals("MachinePlayer")) {
+			player.makeOntology(ontologyManager, this);
+		}
         playerRing.add(player);
     }
     
