@@ -9,6 +9,7 @@ class PlayerRing {
 		player.setPlayerID(allPlayers.size());
 		allPlayers.add(player);
 	}
+	
 
 	PlayerInterface getPlayerByID(int playerID) {
 		for(int i = 0; i < allPlayers.size(); i++) {
@@ -216,8 +217,10 @@ class PlayerRing {
 		for(int players = 0; players < this.numPlayers(); players++) {
 			for(int cards = 0; cards < doneCards.size(); cards++) {
 				allPlayers.get(players).observeCard(doneCards.get(cards), playerID);
+				allPlayers.get(players).setNumPlayers(numPlayers());
 			}
 		}
+		
 
 	}
 
