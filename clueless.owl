@@ -1,0 +1,56 @@
+Prefix(:=<http://clueless/example.owl#>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+
+
+Ontology(<http://clueless/example.owl>
+
+Declaration(Class(:Suspect))
+Declaration(Class(:roomClass))
+Declaration(Class(:weaponClass))
+Declaration(ObjectProperty(:hasObject))
+Declaration(ObjectProperty(:inRoom))
+Declaration(NamedIndividual(:bedroom))
+Declaration(NamedIndividual(:kitchen))
+Declaration(NamedIndividual(:knife))
+Declaration(NamedIndividual(:mr_green))
+Declaration(NamedIndividual(:mrs_white))
+Declaration(NamedIndividual(:rope))
+
+
+############################
+#   Named Individuals
+############################
+
+# Individual: :bedroom (:bedroom)
+
+ClassAssertion(:roomClass :bedroom)
+
+# Individual: :kitchen (:kitchen)
+
+ClassAssertion(:roomClass :kitchen)
+
+# Individual: :knife (:knife)
+
+ClassAssertion(:weaponClass :knife)
+
+# Individual: :mr_green (:mr_green)
+
+ClassAssertion(:Suspect :mr_green)
+ObjectPropertyAssertion(:hasObject :mr_green :knife)
+ObjectPropertyAssertion(:inRoom :mr_green :kitchen)
+
+# Individual: :mrs_white (:mrs_white)
+
+ClassAssertion(:Suspect :mrs_white)
+NegativeObjectPropertyAssertion(:hasObject :mrs_white :knife)
+
+# Individual: :rope (:rope)
+
+ClassAssertion(:weaponClass :rope)
+
+
+)
