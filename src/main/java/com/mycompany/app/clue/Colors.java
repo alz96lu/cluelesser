@@ -1,4 +1,4 @@
-package com.mycompany.app.clue;
+package clue;
 
 // Provides colors for testing module
 

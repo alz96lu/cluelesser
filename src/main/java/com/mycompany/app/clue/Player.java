@@ -1,6 +1,5 @@
-package com.mycompany.app.clue;
+package clue;
 
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,16 +20,12 @@ class Player implements PlayerInterface {
 		return cards.size();
 	}
 
-	public void makeOntology(ClueOntologyManager clueOntologyManager, Game game) throws OWLOntologyCreationException {
-
-	}
-
-	public void loadOntology(Guess confidential) {
+	public void loadAxiomSet() {
 
 	}
 
 	@Override
-	public Ontology getOntology() {
+	public AxiomSet getAxiomSet() {
 		return null;
 	}
 
@@ -119,7 +114,6 @@ class Player implements PlayerInterface {
 		Guess guess = new Guess(suspects.get(Helper.random(suspects.size())),
 				rooms.get(Helper.random(rooms.size())),
 				weapons.get(Helper.random(weapons.size())));
-		System.out.println("Player " + this.playerID + " made a guess: " + guess);
 		return guess;
 	}
 
@@ -143,9 +137,6 @@ class Player implements PlayerInterface {
 
 	@Override
 	public void observeCard(Card responseCard, int responsePlayer) {
-
-		System.out.println("Player " + responsePlayer + " showed Player " + this.playerID + " "+ responseCard);
-
 			String classname = responseCard.getClass().getName();
 			if(classname.contains("Weapon")) {
 				weapons.remove(responseCard);

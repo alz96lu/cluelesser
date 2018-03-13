@@ -1,4 +1,4 @@
-package com.mycompany.app.clue;
+package clue;
 
 
 class Suspect implements Card {

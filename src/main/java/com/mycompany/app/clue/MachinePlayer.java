@@ -1,13 +1,12 @@
-package com.mycompany.app.clue;
+package clue;
 
-
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import java.util.ArrayList;
 
 class MachinePlayer extends Player {
-    Ontology ontology;
+    AxiomSet reasoner;
 
-    public Ontology getOntology() {
-        return ontology;
+    public AxiomSet getAxiomSet() {
+        return reasoner;
     }
 
     public MachinePlayer() {
@@ -15,48 +14,55 @@ class MachinePlayer extends Player {
 
     @Override
     public void observeCard(Card responseCard, int responsePlayer) {
-        ontology.hasA(responsePlayer, new Literal(responseCard));
+        reasoner.addAndResolve(new Definite(new Has(responseCard, responsePlayer)));
     }
+    
+    @Override
+	public void loadAxiomSet() {
+    		this.reasoner = new AxiomSet(playerID, cards);
+	}
 
     @Override
     public void observe(Guess guess, int holdingPlayer) {
-        ontology.hasA(holdingPlayer, new Literal(guess.suspect, guess.weapon, guess.room));
+    		if(holdingPlayer != playerID) {
+    			reasoner.addAndResolve(new Or(new Has(guess.suspect,holdingPlayer),
+        				new Has(guess.weapon,holdingPlayer),
+        				new Has(guess.room,holdingPlayer)));
+    		}
+    		
     }
 
     @Override
     public boolean openConfidential(Guess currentGuess) {
-        if(ontology.playerKnown(currentGuess.weapon) < 0
-            && ontology.playerKnown(currentGuess.room) < 0
-            && ontology.playerKnown(currentGuess.suspect) < 0) {
-            return true;
+        if(!reasoner.cardKnown(currentGuess.weapon) 
+        		&& !reasoner.cardKnown(currentGuess.room) 
+        		&& !reasoner.cardKnown(currentGuess.suspect)) {
+        		return true;
         }
         return false;
     }
 
     @Override
     public Card showCard(Guess guess) {
-        if(ontology.playerKnown(guess.getRoom()) == this.playerID) {
+    		ArrayList<Card> myCards = reasoner.playerCards(this.playerID);
+        if(myCards.contains(guess.getRoom())) {
             return guess.getRoom();
         }
-        if(ontology.playerKnown(guess.getSuspect()) == this.playerID) {
+        if(myCards.contains(guess.getSuspect())) {
             return guess.getSuspect();
         }
-        if(ontology.playerKnown(guess.getWeapon()) == this.playerID) {
+        if(myCards.contains(guess.getWeapon())) {
             return guess.getWeapon();
         }
-
         return null;
     }
 
-    public void loadOntology(Guess confidential) {
-        ontology = new Ontology(this.playerID,this.cards,this.numPlayers,confidential);
+    public void loadReasoner() {
+         this.reasoner = new AxiomSet(this.playerID,this.cards);
     }
 
     public Guess makeGuess() {
-        Suspect guessSuspect = ontology.suspects.get(Helper.random(ontology.suspects.size()));
-        Weapon guessWeapon = ontology.weapons.get(Helper.random(ontology.weapons.size()));
-        Room guessRoom = ontology.rooms.get(Helper.random(ontology.rooms.size()));
-        Guess guess = new Guess(guessSuspect,guessRoom,guessWeapon);
+        Guess guess = reasoner.randomGuess();
         System.out.println("Player " + this.playerID + " made a guess: " + guess);
         return guess;
     }

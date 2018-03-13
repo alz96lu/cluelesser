@@ -63,7 +63,7 @@ public class Tester {
 		Colors.load();
 		Game.test();
 		AxiomSet.main(args);
-//		Has.main(args);
+		Has.main(args);
 		
 		
 	
