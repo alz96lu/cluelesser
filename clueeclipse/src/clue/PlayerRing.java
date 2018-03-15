@@ -29,6 +29,9 @@ class PlayerRing {
 	}
 
 	Guess manageTurn(int currentPlayer) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Type 'n' to execute next turn.");
+		scanner.next();
 		System.out.println("Player " + currentPlayer + "'s turn\n");
 		if(allPlayers.get(currentPlayer).getClass().getName().contains("Machine")) {
 			System.out.println("Machine Player " + currentPlayer + "'s AxiomSet:");
